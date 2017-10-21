@@ -1,9 +1,7 @@
 package com.technath.einventory.dao.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 
 @Entity
@@ -11,7 +9,8 @@ import javax.persistence.Table;
 public class Supplier {
     @Id
     @Column(name = "supplierid")
-    private long supplierId;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long supplierId;
 
     @Column(name = "suppliername")
     private String supplierName;
@@ -22,13 +21,13 @@ public class Supplier {
     @Column(name = "accountname")
     private String accountName;
 
-    @Column(name = "ifcsCode")
+    @Column(name = "ifcscode")
     private String ifcsCode;
 
-    @Column(name = "bankName")
+    @Column(name = "bankname")
     private String bankName;
 
-    @Column(name = "bankBranch")
+    @Column(name = "bankbranch")
     private String bankBranch;
 
     @Column(name = "email")
@@ -41,11 +40,11 @@ public class Supplier {
     @Column(name = "phone2")
     private String phone2;
 
-    public long getSupplierId() {
+    public Long getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(long supplierId) {
+    public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
     }
 

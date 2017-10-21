@@ -1,6 +1,7 @@
 package com.technath.einventory.rest.controller;
 
 import ch.qos.logback.classic.Logger;
+import com.technath.einventory.exception.DataSaveException;
 import com.technath.einventory.exception.ValidationErrorException;
 import com.technath.einventory.rest.request.ApiError;
 import org.hibernate.exception.ConstraintViolationException;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.persistence.EntityNotFoundException;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -146,7 +148,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String error = "Error writing JSON output";
-        return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex));
+        return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, error, ex));
     }
 
     /**
@@ -169,7 +171,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         if (ex.getCause() instanceof ConstraintViolationException) {
             return buildResponseEntity(new ApiError(HttpStatus.CONFLICT, "Database error", ex.getCause()));
         }
-        return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex));
+        return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, ex));
     }
 
     /**
@@ -183,6 +185,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                       WebRequest request) {
         ApiError apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(String.format("The parameter '%s' of value '%s' could not be converted to type '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
+        apiError.setDebugMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    /**
+     * Handle Exception, handle generic Exception.class
+     *
+     * @param ex the Exception
+     * @return the ApiError object
+     */
+    @ExceptionHandler(DataSaveException.class)
+    protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(DataSaveException ex,
+                                                                      WebRequest request) {
+        ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
+        apiError.setMessage(String.format("Application Error "));
         apiError.setDebugMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
