@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import javax.ws.rs.core.Response;
 
+import java.util.List;
+
 import static com.technath.einventory.util.LoggingUtil.*;
 
 @RestController
@@ -36,9 +38,15 @@ public class SupplierController {
                             HttpServletRequest request, HttpServletResponse response) throws ValidationErrorException, DataSaveException {
         LOGGER.info(API_DOMAIN_BASE, log(INVENTORY), log(SUPPLIER), log(ADD_SUPPLIER), log("Received Request"));
         supplierService.addSupplier(supplierDTO);
-
-
     }
 
-
+    @RequestMapping(value = "",
+            method = RequestMethod.GET,
+            consumes = {"application/json", "application/xml"},
+            produces = {"application/json", "application/xml"})
+//    @ResponseStatus(HttpStatus.CREATED)
+    public List<SupplierDTO> getSuppliers(HttpServletRequest request, HttpServletResponse response) throws ValidationErrorException, DataSaveException {
+        LOGGER.info(API_DOMAIN_BASE, log(INVENTORY), log(SUPPLIER), log(ADD_SUPPLIER), log("Received Request"));
+        return supplierService.getAllSupliers();
+    }
 }
