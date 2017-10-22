@@ -1,6 +1,7 @@
 package com.technath.einventory.rest.controller;
 
 import com.technath.einventory.exception.DataSaveException;
+import com.technath.einventory.exception.EntityNotFoundException;
 import com.technath.einventory.exception.ValidationErrorException;
 import com.technath.einventory.rest.SupplierRequestValidator;
 import com.technath.einventory.rest.request.SupplierDTO;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import java.util.List;
@@ -44,9 +47,18 @@ public class SupplierController {
             method = RequestMethod.GET,
             consumes = {"application/json", "application/xml"},
             produces = {"application/json", "application/xml"})
-//    @ResponseStatus(HttpStatus.CREATED)
     public List<SupplierDTO> getSuppliers(HttpServletRequest request, HttpServletResponse response) throws ValidationErrorException, DataSaveException {
         LOGGER.info(API_DOMAIN_BASE, log(INVENTORY), log(SUPPLIER), log(ADD_SUPPLIER), log("Received Request"));
         return supplierService.getAllSupliers();
+    }
+
+    @RequestMapping(value = "/{supplierId}",
+            method = RequestMethod.GET,
+            consumes = {"application/json", "application/xml"},
+            produces = {"application/json", "application/xml"})
+    public SupplierDTO getSupplierBySupplierId(@PathVariable(value="supplierId") Long supplierId, HttpServletRequest request, HttpServletResponse response)
+            throws ValidationErrorException, DataSaveException, EntityNotFoundException {
+        LOGGER.info(API_DOMAIN_BASE, log(INVENTORY), log(SUPPLIER), log(ADD_SUPPLIER), log("Received Request"));
+        return supplierService.findSupplierBySupplierId(supplierId);
     }
 }

@@ -217,6 +217,22 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         apiError.setMessage(ex.getLocalizedMessage());
         return buildResponseEntity(apiError);
     }
+
+
+    /**
+     * Handle Exception, handle generic Exception.class
+     *
+     * @param ex the Exception
+     * @return the ApiError object
+     */
+    @ExceptionHandler(com.technath.einventory.exception.EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFoundException(com.technath.einventory.exception.EntityNotFoundException ex,
+                                                               WebRequest request) {
+        ApiError apiError = new ApiError(BAD_REQUEST,ex);
+        apiError.setMessage(ex.getLocalizedMessage());
+        return buildResponseEntity(apiError);
+    }
+
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
