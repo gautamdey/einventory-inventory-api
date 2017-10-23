@@ -9,6 +9,8 @@ public final class LoggingUtil {
     public static final String API_DOMAIN_BASE = "api_domain={} api_name={} api_method={} message={}";
     public static final String INVENTORY = "inventory";
     public static final String SUPPLIER = "supplier";
+    public static final String PRODUCT = "product";
+
     public static final String SALE_DETAILS_API = "Sale Details API";
     public static final String START = "START";
     public static final String SUCCESS = "SUCCESS";
