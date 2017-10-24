@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class ProductService {
                     log("Added  Product "), log(PRODUCT_ID), savedProduct.getId());
         } catch (Exception ex) {
             LOGGER.error(API_DOMAIN_BASE, log(INVENTORY), log(ADD_PRODUCT), log("addProduct"),
-                    log("Error adding Supplier "));
+                    log("Error adding Product "));
             throw new DataSaveException(ex.getMessage());
         }
         return savedProduct;
@@ -65,12 +66,12 @@ public class ProductService {
         return productDTOS;
     }
 
-    public ProductDTO findProductById(Long supplierId) throws EntityNotFoundException {
+    public ProductDTO findProductById(BigInteger id) throws EntityNotFoundException {
         ModelMapper modelMapper = new ModelMapper();
-        Product product = productRepository.findById(supplierId);
+        Product product = productRepository.findById(id);
         if (product == null) {
-            LOGGER.info(join(API_DOMAIN_BASE, PRODUCT_ID), log(INVENTORY), log(GET_PRODUCT), log("findProductById"), supplierId);
-            throw new EntityNotFoundException(String.format("Supplierid = %s not found", supplierId));
+            LOGGER.info(join(API_DOMAIN_BASE, PRODUCT_ID), log(INVENTORY), log(GET_PRODUCT), log("findProductById"), id);
+            throw new EntityNotFoundException(String.format("Produictid = %s not found", id));
         }
         return modelMapper.map(product, ProductDTO.class);
     }
