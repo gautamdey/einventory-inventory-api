@@ -7,4 +7,6 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
 
     public Supplier findBySupplierId(Long supplierId);
 
+
+
 }
